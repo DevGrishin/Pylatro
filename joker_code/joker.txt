@@ -1,0 +1,2 @@
+multiplier += 4
+joker_display_text = "+4 mult"
