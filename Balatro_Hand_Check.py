@@ -192,7 +192,6 @@ def chip_calc(card_list):
         hand = "High Card"
     indexes = card_indexes
     card_indexes = []
-    print(indexes)
     return [hand, chips, mult, indexes]
 
             
