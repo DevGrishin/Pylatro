@@ -681,6 +681,10 @@ while running:
 
     if round_score >= beat:
         screen.fill(WHITE)
+        font = pygame.font.SysFont(None, 74)
+        text = font.render("Round Complete", True, (255, 0, 0))
+        text_rect = text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
+        screen.blit(text, text_rect)
         #IMPLEMENT SHOP HERE
 
 
