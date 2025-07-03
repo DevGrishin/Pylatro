@@ -693,6 +693,8 @@ while running:
         discards_remaining = 3
         deck = decktool.get_deck()
         random.shuffle(deck)
+        beat += round(200 * current_round ** 1.1)
+
 
     screen.fill(WHITE)
     draw_gui_panel(screen)
