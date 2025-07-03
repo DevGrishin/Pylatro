@@ -2,9 +2,9 @@
 card_indexes = []
 
 def check_straight(card_list):
-    # Extract and sort the card values
+    
     values = sorted([int(card[2]) for card in card_list])
-    # Check for normal straight
+    
     for i in range(4):
         if values[i+1] != values[i] + 1:
             break
