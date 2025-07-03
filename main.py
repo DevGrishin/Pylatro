@@ -6,7 +6,7 @@ from Balatro_Hand_Check import chip_calc
 
 pygame.init()
 
-# --- UI Improvements ---
+
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -203,8 +203,7 @@ def calculate_joker_positions():
     num_jokers = len(jokers)
     total_width = num_jokers * JOKER_WIDTH + (num_jokers - 1) * JOKER_SPACING
     start_x = (SCREEN_WIDTH - total_width) // 2
-    # Move jokers lower to avoid header text
-    y_offset = 100  # was 20, now 100 to move below header
+    y_offset = 100  
     for i in range(num_jokers):
         x = start_x + i * (JOKER_WIDTH + JOKER_SPACING)
         y = y_offset
@@ -213,7 +212,6 @@ def calculate_joker_positions():
 
 
 def draw_joker_info(joker, pos):
-    # Draw info box with rounded rect, auto-size for text
     name_text = GUI_TEXT_FONT.render(joker[5], True, BLACK)
     desc_text = GUI_TEXT_FONT.render(joker[6], True, (60, 60, 60))
     padding_x = 18
@@ -237,12 +235,12 @@ def draw_jokers():
     mouse_pos = pygame.mouse.get_pos()
     for i, pos in enumerate(joker_positions):
         joker_rect = pygame.Rect(pos[0], pos[1], JOKER_WIDTH, JOKER_HEIGHT)
-        # Draw shadow
+
         shadow_rect = pygame.Rect(pos[0]+6, pos[1]+8, JOKER_WIDTH, JOKER_HEIGHT)
         shadow_surf = pygame.Surface((JOKER_WIDTH, JOKER_HEIGHT), pygame.SRCALPHA)
         pygame.draw.rect(shadow_surf, SHADOW_COLOR, (0, 0, JOKER_WIDTH, JOKER_HEIGHT), border_radius=16)
         screen.blit(shadow_surf, (pos[0]+6, pos[1]+8))
-        # Draw card with rounded rect background
+
         card_bg = pygame.Surface((JOKER_WIDTH, JOKER_HEIGHT), pygame.SRCALPHA)
         pygame.draw.rect(card_bg, (255, 255, 255), (0, 0, JOKER_WIDTH, JOKER_HEIGHT), border_radius=16)
         screen.blit(card_bg, pos)
@@ -254,18 +252,14 @@ def draw_jokers():
 def draw_cards(hovered_card_index=None):
     for i in range(len(CARDS)):
         x, y = card_positions[i]
-        # Draw shadow
         shadow_surf = pygame.Surface((CARD_WIDTH, CARD_HEIGHT), pygame.SRCALPHA)
         pygame.draw.rect(shadow_surf, SHADOW_COLOR, (0, 0, CARD_WIDTH, CARD_HEIGHT), border_radius=14)
         screen.blit(shadow_surf, (x+5, y+8))
-        # Card background
         card_bg = pygame.Surface((CARD_WIDTH, CARD_HEIGHT), pygame.SRCALPHA)
         pygame.draw.rect(card_bg, (255, 255, 255), (0, 0, CARD_WIDTH, CARD_HEIGHT), border_radius=14)
         screen.blit(card_bg, (x, y))
-        # Highlight selected
         if i in selected_cards:
             pygame.draw.rect(screen, SELECTED_BORDER, (x-3, y-3, CARD_WIDTH+6, CARD_HEIGHT+6), 4, border_radius=16)
-        # Draw card image
         if hovered_card_index is not None and i == hovered_card_index:
             enlarged_card = pygame.transform.scale(CARDS[i], (int(CARD_WIDTH*1.1), int(CARD_HEIGHT*1.1)))
             enlarged_x = x - (enlarged_card.get_width() - CARD_WIDTH) // 2
@@ -277,14 +271,11 @@ def draw_cards(hovered_card_index=None):
 
 def draw_gui_panel(screen):
     global potential_chips, potential_multiplier
-    # Draw left panel
     gui_rect = pygame.Rect(0, 0, GUI_WIDTH, SCREEN_HEIGHT)
     pygame.draw.rect(screen, GUI_BG_COLOR, gui_rect, border_radius=0)
-    # Draw header bar
     header_rect = pygame.Rect(0, 0, SCREEN_WIDTH, 70)
     pygame.draw.rect(screen, (44, 48, 64), header_rect)
     title = HEADER_FONT.render("Pylatro", True, (255, 220, 120))
-    # Center the title horizontally in the header bar
     title_x = (SCREEN_WIDTH // 2) - (title.get_width() // 2)
     title_y = 1
     screen.blit(title, (title_x, title_y))
@@ -374,7 +365,6 @@ button_font = pygame.font.SysFont("segoeui", 28, bold=True)
 button_rect = pygame.Rect(60, SCREEN_HEIGHT - 80, 170, 48)
 discard_button_rect = pygame.Rect(60, SCREEN_HEIGHT - 150, 170, 48)
 
-# Remove old button_text/discard_button_text usage (now rendered inline)
 
 
 def shake_animation(image, center_pos, start_time, shake_duration, shake_steps):
@@ -587,7 +577,6 @@ def animate_cards_to_center(selected_indices):
 
             draw_cards()
 
-            # Draw improved buttons (copied from main loop)
             mouse_pos = pygame.mouse.get_pos()
             mouse_over_play = button_rect.collidepoint(mouse_pos)
             mouse_over_discard = discard_button_rect.collidepoint(mouse_pos)
@@ -685,7 +674,6 @@ while running:
         display_game_over_screen()
         running = False
         break
-    # Game over if no hands left and score is below required
     if hands == 0 and round_score < beat:
         display_game_over_screen()
         running = False
@@ -694,7 +682,7 @@ while running:
     if round_score >= beat:
         screen.fill(WHITE)
         #IMPLEMENT SHOP HERE
-        
+
 
 
         pygame.display.flip()
@@ -718,7 +706,6 @@ while running:
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
-                # Button hover logic
                 if button_rect.collidepoint(mouse_pos) and selected_cards and hands > 0:
                     animate_cards_to_center(selected_cards)
                     replace_selected_cards(selected_cards)
@@ -757,13 +744,11 @@ while running:
     draw_jokers()
     draw_cards(hovered_card_index)
 
-    # --- Improved Buttons ---
     mouse_over_play = button_rect.collidepoint(mouse_pos)
     mouse_over_discard = discard_button_rect.collidepoint(mouse_pos)
     play_enabled = bool(selected_cards and not animation_running and hands > 0)
     discard_enabled = bool(selected_cards and discards_remaining > 0)
 
-    # Play Hand button
     play_color = BUTTON_BG_HOVER if mouse_over_play and play_enabled else (BUTTON_BG if play_enabled else BUTTON_DISABLED)
     pygame.draw.rect(screen, play_color, button_rect, border_radius=16)
     play_text = button_font.render("Play Hand", True, WHITE if play_enabled else (200, 200, 200))
@@ -771,7 +756,6 @@ while running:
     play_text_y = button_rect.y + (button_rect.height - play_text.get_height()) // 2
     screen.blit(play_text, (play_text_x, play_text_y))
 
-    # Discard button
     discard_color = BUTTON_BG_HOVER if mouse_over_discard and discard_enabled else (BUTTON_BG if discard_enabled else BUTTON_DISABLED)
     pygame.draw.rect(screen, discard_color, discard_button_rect, border_radius=16)
     discard_text = button_font.render("Discard", True, WHITE if discard_enabled else (200, 200, 200))
