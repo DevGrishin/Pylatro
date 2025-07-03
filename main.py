@@ -672,13 +672,12 @@ def replace_selected_cards(selected_indices):
 
 
 def display_game_over_screen():
-    screen.fill(WHITE)
     font = pygame.font.SysFont(None, 74)
-    text = font.render("Game Over", True, BLACK)
+    text = font.render("Game Over", True, (255, 0, 0))
     text_rect = text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
     screen.blit(text, text_rect)
     pygame.display.flip()
-    pygame.time.wait(2000)
+    pygame.time.wait(4000)
 
 
 while running:
@@ -686,6 +685,26 @@ while running:
         display_game_over_screen()
         running = False
         break
+    # Game over if no hands left and score is below required
+    if hands == 0 and round_score < beat:
+        display_game_over_screen()
+        running = False
+        break
+
+    if round_score >= beat:
+        screen.fill(WHITE)
+        #IMPLEMENT SHOP HERE
+        
+
+
+        pygame.display.flip()
+        pygame.time.wait(1000)
+        current_round += 1
+        round_score = 0
+        hands = 4
+        discards_remaining = 3
+        deck = decktool.get_deck()
+        random.shuffle(deck)
 
     screen.fill(WHITE)
     draw_gui_panel(screen)
